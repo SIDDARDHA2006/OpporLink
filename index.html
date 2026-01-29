@@ -1,0 +1,2532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpporLink - Discover Opportunities. Build Skills. Grow Together</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(to bottom, #e8f0f8 0%, #f5f9fc 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            background-color: #1a1f2e;
+            color: white;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: #b8c5d6;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 20px 20px;
+            display: block;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 280px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            padding: 12px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            color: #1a1f2e;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8fafc;
+            padding-left: 24px;
+        }
+
+        .dropdown-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: #4c8bf5;
+        }
+
+        .dropdown-content {
+            flex: 1;
+        }
+
+        .dropdown-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1a1f2e;
+            margin-bottom: 2px;
+        }
+
+        .dropdown-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 8px 16px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .login-btn {
+            color: #b8c5d6;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .login-btn:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+        }
+
+        .user-email {
+            color: #b8c5d6;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            background-color: #4c8bf5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #3b7ae0;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #4a5568;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-icon:hover {
+            background-color: #5a6578;
+            cursor: pointer;
+        }
+
+        /* Profile Modal */
+        .profile-modal {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            width: 350px;
+            z-index: 1001;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .profile-modal.active {
+            display: block;
+        }
+
+        .profile-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-field-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .profile-field-value {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .profile-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .skill-tag {
+            background: #f0f0f0;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-btn-logout {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .profile-btn-logout:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-btn-edit {
+            background: #667eea;
+            color: white;
+        }
+
+        .profile-btn-edit:hover {
+            background: #5568d3;
+        }
+
+        .profile-btn-save {
+            background: #10b981;
+            color: white;
+        }
+
+        .profile-btn-save:hover {
+            background: #059669;
+        }
+
+        .profile-btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .profile-btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        /* Edit Form */
+        .profile-edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+            text-transform: uppercase;
+        }
+
+        .profile-form-group input {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .profile-form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            color: #1a1f2e;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            color: #5a6c7d;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4c8bf5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3b7ae0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 139, 245, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #4c8bf5;
+            border: 1px solid #e0e7ef;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        /* Search Section */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border: 1px solid #d5dde6;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: white;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4c8bf5;
+            box-shadow: 0 0 0 3px rgba(76, 139, 245, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-category {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 12px;
+            text-transform: uppercase;
+            background-color: #f8fafc;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .search-category:first-child {
+            border-top: none;
+        }
+
+        .search-result-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-result-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .search-result-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #e8f0f8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .search-result-content {
+            flex: 1;
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            color: #1a1f2e;
+            font-size: 14px;
+        }
+
+        .search-result-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-tab {
+            padding: 8px 18px;
+            background-color: white;
+            border: 1px solid #d5dde6;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #5a6c7d;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab:hover {
+            background-color: #f0f4f8;
+        }
+
+        .filter-tab.active {
+            background-color: #4c8bf5;
+            color: white;
+            border-color: #4c8bf5;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1f2e;
+        }
+
+        .section-count {
+            font-size: 12px;
+            color: #6b7280;
+            background-color: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        /* Event Card */
+        .event-card {
+            background-color: #f8fafc;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4c8bf5;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .event-info {
+            padding: 15px;
+        }
+
+        /* NEW: Event card meta + actions */
+        .event-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .event-category-badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.14);
+            color: #e5edff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: #1a1f2e;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .event-organizer {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .event-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .event-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .tag-creative {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag-coding {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tag-design {
+            background-color: #fce7f3;
+            color: #9f1239;
+        }
+
+        .tag-business {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .tag-ai {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .tag-required-skill {
+            background-color: #e0f2fe;
+            color: #075985;
+        }
+
+        .event-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .event-deadline-text {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .event-status-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background-color: #ecfdf5;
+            color: #166534;
+            font-weight: 500;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+
+        /* Opportunity Card */
+        .opportunity-card {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .opportunity-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .opportunity-image {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4c8bf5 0%, #3b7ae0 100%);
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+        }
+
+        .opportunity-info {
+            flex: 1;
+        }
+
+        .opportunity-title {
+            font-weight: 600;
+            color: #1a1f2e;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .opportunity-company {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .opportunity-details {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-bottom: 5px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .opportunity-skills {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .skill-badge {
+            padding: 3px 8px;
+            background-color: white;
+            border: 1px solid #d5dde6;
+            border-radius: 10px;
+            font-size: 10px;
+            color: #4b5563;
+        }
+
+        /* Skill Chip */
+        .skill-chip {
+            padding: 12px 20px;
+            background-color: white;
+            border: 2px solid #4c8bf5;
+            border-radius: 8px;
+            color: #4c8bf5;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .skill-chip:hover {
+            background-color: #4c8bf5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 139, 245, 0.2);
+        }
+
+        .skill-chip.active {
+            background-color: #4c8bf5;
+            color: white;
+        }
+
+        .skill-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .skill-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .view-all-btn {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top-color: #4c8bf5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Why Section */
+        .why-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 1200px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .why-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1f2e;
+            margin-bottom: 40px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature:hover {
+            background-color: #f8fafc;
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background-color: #e8f0f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .feature:hover .feature-icon {
+            background-color: #4c8bf5;
+        }
+
+        .feature:hover .feature-icon svg {
+            stroke: white;
+        }
+
+        .feature-icon svg {
+            width: 35px;
+            height: 35px;
+            stroke: #4c8bf5;
+            transition: all 0.3s;
+        }
+
+        .feature-title {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #4c8bf5 0%, #3b7ae0 100%);
+            border-radius: 12px;
+            padding: 50px;
+            text-align: center;
+            margin: 40px auto;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .btn-white {
+            background-color: white;
+            color: #4c8bf5;
+        }
+
+        .btn-white:hover {
+            background-color: #f8fafc;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #6b7280;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f3f4f6;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1f2e;
+            margin-bottom: 20px;
+        }
+
+        .modal-text {
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .modal-details {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-detail {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .modal-detail-label {
+            font-weight: 600;
+            color: #1a1f2e;
+            min-width: 100px;
+        }
+
+        .modal-detail-value {
+            color: #5a6c7d;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #1a1f2e;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .toast.active {
+            display: block;
+        }
+
+        .toast.success {
+            background-color: #10b981;
+        }
+
+        .toast.error {
+            background-color: #ef4444;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .skill-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================================================
+           UPDATED: keep hero "tabs" hidden but restore navbar tabs
+           - Hides the two big hero buttons (Explore Events / Learn with Peers)
+           - Navbar links are now visible and simplified
+           ========================================================= */
+        .hero-buttons {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- API Configuration -->
+    <script src="api-config.js"></script>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="scrollToTop()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            OpporLink
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="navigateMain('home', this)">Home</a>
+            </li>
+            <li class="nav-item">
+                <!-- UPDATED: go to standalone events page instead of scrolling -->
+                <a class="nav-link" href="events.html">Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateMain('opportunities', this)">Opportunities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateMain('skill-exchange', this)">Skill Exchange</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="fortex.h36/community.html">Community</a>
+            </li>
+        </ul>
+        <div class="nav-right">
+            <a id="login-btn" class="login-btn" href="login.html">Login</a>
+            <div class="user-icon" id="userIconBtn" onclick="toggleProfileModal()" style="position: relative;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+
+                <!-- Profile Modal -->
+                <div class="profile-modal" id="profileModal">
+                    <!-- View Mode -->
+                    <div id="profileViewMode">
+                        <div class="profile-modal-header">
+                            <div class="profile-avatar" id="profileAvatar">U</div>
+                            <div>
+                                <div class="profile-name" id="profileName">User</div>
+                                <div class="profile-email" id="profileEmail">user@example.com</div>
+                            </div>
+                        </div>
+
+                        <div class="profile-info">
+                            <div class="profile-field">
+                                <div class="profile-field-label">Age</div>
+                                <div class="profile-field-value" id="profileAge">-</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="profile-field-label">Email</div>
+                                <div class="profile-field-value" id="profileEmailField">user@example.com</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="profile-field-label">Skills</div>
+                                <div class="profile-skills" id="profileSkills">
+                                    <span class="skill-tag">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button class="profile-btn profile-btn-edit"
+                                onclick="event.stopPropagation(); enterEditMode()">Edit Profile</button>
+                            <button class="profile-btn profile-btn-logout"
+                                onclick="event.stopPropagation(); handleLogout()">Logout</button>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <div id="profileEditMode" style="display: none;">
+                        <div class="profile-modal-header">
+                            <div class="profile-avatar" id="profileAvatarEdit">U</div>
+                            <div>
+                                <div class="profile-name">Edit Profile</div>
+                            </div>
+                        </div>
+
+                        <form class="profile-edit-form" onsubmit="event.stopPropagation(); saveProfileChanges(event)">
+                            <div class="profile-form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="editName" placeholder="Your name"
+                                    onclick="event.stopPropagation()" required>
+                            </div>
+
+                            <div class="profile-form-group">
+                                <label>Age</label>
+                                <input type="number" id="editAge" placeholder="Your age" min="13" max="120"
+                                    onclick="event.stopPropagation()" required>
+                            </div>
+
+                            <div class="profile-form-group">
+                                <label>Skills (comma separated)</label>
+                                <input type="text" id="editSkills" placeholder="e.g., React, Python, UI Design"
+                                    onclick="event.stopPropagation()" required>
+                            </div>
+
+                            <div class="profile-actions">
+                                <button type="submit" class="profile-btn profile-btn-save"
+                                    onclick="event.stopPropagation()">Save Changes</button>
+                                <button type="button" class="profile-btn profile-btn-cancel"
+                                    onclick="event.stopPropagation(); cancelEditMode()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="user-info" class="user-info" style="display: none; align-items: center; gap: 15px;">
+                <span id="user-email" class="user-email"></span>
+                <button id="logout-btn" class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>Discover Opportunities.<br>Build Skills. Grow Together</h1>
+        <p>Find hackathons, internships, and events — and prepare for them with peers</p>
+
+        <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="scrollToSection('events')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                Explore Events
+            </button>
+            <button class="btn btn-secondary" onclick="navigateTo('learn-with-peers')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Learn with Peers
+            </button>
+        </div>
+
+        <div class="search-container">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" class="search-input" placeholder="Search events, opportunities, skills..."
+                id="searchInput">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all" onclick="filterContent('all', this)">All</div>
+            <div class="filter-tab" data-filter="workshops" onclick="filterContent('workshops', this)">Workshops</div>
+            <div class="filter-tab" data-filter="internships" onclick="filterContent('internships', this)">Internships
+            </div>
+            <div class="filter-tab" data-filter="skills" onclick="filterContent('skills', this)">Skills</div>
+            <!-- NEW: My Events tab -->
+            <div class="filter-tab" data-filter="my-events" onclick="filterContent('my-events', this)">My Events</div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="main-content" id="mainContent">
+        <!-- Upcoming Events -->
+        <div class="section" id="events">
+            <div class="section-header">
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    Upcoming Events
+                </div>
+                <span class="section-count" id="eventsCount">0</span>
+            </div>
+
+            <div id="eventsContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary view-all-btn" onclick="loadMoreEvents()">View All Events</button>
+        </div>
+
+        <!-- Opportunities -->
+        <div class="section" id="opportunities">
+            <div class="section-header">
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    Opportunities
+                </div>
+                <span class="section-count" id="opportunitiesCount">0</span>
+            </div>
+
+            <div id="opportunitiesContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary view-all-btn" onclick="loadMoreOpportunities()">Explore
+                Opportunities</button>
+        </div>
+
+        <!-- In-Demand Skills -->
+        <div class="section" id="skill-exchange">
+            <div class="section-header">
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                    In-Demand Skills
+                </div>
+                <span class="section-count" id="skillsCount">0</span>
+            </div>
+
+            <div class="skill-grid" id="skillsContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why This Platform -->
+    <div class="why-section">
+        <h2 class="why-title">WHY THIS PLATFORM</h2>
+        <div class="features">
+            <div class="feature"
+                onclick="showFeatureModal('All opportunities in one', 'Access hackathons, internships, workshops, and events from multiple sources in a single, easy-to-navigate platform. Save time and never miss an opportunity.')">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                    </svg>
+                </div>
+                <div class="feature-title">All opportunities in one</div>
+            </div>
+            <div class="feature"
+                onclick="showFeatureModal('Learn skills before applying', 'Prepare yourself with relevant skills and knowledge before applying to opportunities. Access curated learning resources and increase your chances of success.')">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                </div>
+                <div class="feature-title">Learn skills before applying</div>
+            </div>
+            <div class="feature"
+                onclick="showFeatureModal('Peer-peer career preparation', 'Connect with fellow students and professionals to prepare together. Share experiences, form study groups, and support each other in your career journey.')">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="feature-title">Peer-peer career preparation</div>
+            </div>
+            <div class="feature"
+                onclick="showFeatureModal('Student focused platform', 'Built specifically for students and recent graduates, with features and opportunities tailored to your needs and career stage. Get personalized recommendations and guidance.')">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                    </svg>
+                </div>
+                <div class="feature-title">Student focused platform</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section" id="community">
+        <h2 class="cta-title">Ready to prepare smarter?</h2>
+        <div class="cta-buttons">
+            <button class="btn btn-white" onclick="showCreateProfileModal()">Create Profile</button>
+            <button class="btn btn-outline" onclick="scrollToSection('opportunities')">Browse Opportunities</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // State
+        let currentFilter = 'all';
+        // Homepage preview: show only a few events
+        let visibleEvents = 3;
+        let visibleOpportunities = 2;
+        let allEvents = [];
+        let allOpportunities = [];
+        let allSkills = [];
+        let myEvents = []; // track registered events in-memory on frontend
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAllData();
+            setupSearch();
+        });
+
+        // Load all data from API
+        async function loadAllData() {
+            try {
+                await Promise.all([
+                    loadEvents(),
+                    loadOpportunities(),
+                    loadSkills()
+                ]);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Error loading data. Using offline mode.', 'error');
+                // Fallback to local data if API is not available
+                loadLocalData();
+            }
+        }
+
+        // Load Events from API (homepage preview only)
+        async function loadEvents() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/events?limit=${visibleEvents}`);
+                if (!response.ok) throw new Error('Failed to fetch events');
+
+                allEvents = await response.json();
+                console.log('All events:', allEvents);
+                displayEvents(allEvents);
+                updateCount('eventsCount', allEvents.length);
+            } catch (error) {
+                console.error('Error loading events:', error);
+                throw error; // Rethrow to trigger offline mode in loadAllData
+            }
+        }
+
+        // Helper: compute countdown and status for an event
+        function getEventTimingInfo(event) {
+            const now = new Date();
+            const regDeadline = event.registrationDeadline ? new Date(event.registrationDeadline) : null;
+            const eventDate = event.eventDate ? new Date(event.eventDate) : null;
+
+            let countdownText = 'No deadline';
+            let status = 'Upcoming';
+
+            if (regDeadline && !isNaN(regDeadline.getTime())) {
+                const diff = regDeadline.getTime() - now.getTime();
+                if (diff <= 0) {
+                    countdownText = 'Registration closed';
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    countdownText = `${days}d ${hours}h left to register`;
+                }
+            }
+
+            if (eventDate && !isNaN(eventDate.getTime())) {
+                if (now > eventDate) {
+                    status = 'Completed';
+                } else if (regDeadline && now > regDeadline && now <= eventDate) {
+                    status = 'Ongoing';
+                } else {
+                    status = 'Upcoming';
+                }
+            }
+
+            return { countdownText, status };
+        }
+
+        // Display Events
+        function displayEvents(events) {
+            const container = document.getElementById('eventsContainer');
+            if (events.length === 0) {
+                container.innerHTML = '<div class="no-results">No events found</div>';
+                return;
+            }
+
+            container.innerHTML = events.map(event => {
+                const { countdownText, status } = getEventTimingInfo(event);
+                const requiredSkills = Array.isArray(event.requiredSkills) ? event.requiredSkills : [];
+
+                return `
+                <div class="event-card" data-category="${event.category}">
+                    <div class="event-image">
+                        <div>${event.type || 'Event'}</div>
+                        <span class="event-badge">${event.registrations}/${event.maxParticipants}</span>
+                        <span class="event-category-badge">${event.category || 'Event'}</span>
+                    </div>
+                    <div class="event-info">
+                        <div class="event-header-row">
+                            <div>
+                                <div class="event-title">${event.title}</div>
+                                <div class="event-organizer">${event.organizer || ''}</div>
+                            </div>
+                            <div class="tag tag-business" style="font-size:11px;">
+                                ${event.mode ? event.mode.charAt(0).toUpperCase() + event.mode.slice(1) : 'Mode'}
+                            </div>
+                        </div>
+                        <div class="event-meta">
+                            <div class="event-meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                ${event.eventDate ? new Date(event.eventDate).toLocaleDateString() : event.date || 'TBA'}
+                            </div>
+                            <div class="event-meta-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                ${event.location || 'Online'}
+                            </div>
+                        </div>
+                        <div class="event-meta" style="margin-top:4px;">
+                            <div class="event-meta-item">
+                                <strong style="font-size:11px;">Reg. Deadline:</strong>
+                                ${event.registrationDeadline ? new Date(event.registrationDeadline).toLocaleDateString() : 'N/A'}
+                            </div>
+                            <div class="event-meta-item">
+                                <strong style="font-size:11px;">Difficulty:</strong>
+                                <span class="tag tag-coding" style="font-size:11px;">
+                                    ${event.difficulty ? event.difficulty.charAt(0).toUpperCase() + event.difficulty.slice(1) : 'N/A'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="event-tags" style="margin-top:8px;">
+                            ${requiredSkills.map(skill => `<span class="tag tag-required-skill">${skill}</span>`).join('')}
+                            ${event.prize ? `<span class="tag tag-ai">Prize: ${event.prize}</span>` : ''}
+                        </div>
+                        <div class="event-footer-row">
+                            <div class="event-deadline-text">${countdownText}</div>
+                            <div class="event-status-badge">${status}</div>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-secondary btn-small" onclick='showEventDetails(${JSON.stringify(event)})'>View Details</button>
+                            <button class="btn btn-primary btn-small" onclick='registerForEvent(${event.id})'>Register</button>
+                            <button class="btn btn-secondary btn-small" onclick='findTeamForEvent(${event.id})'>Find Team</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Load Opportunities from API
+        async function loadOpportunities() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/opportunities?limit=${visibleOpportunities}`);
+                if (!response.ok) throw new Error('Failed to fetch opportunities');
+
+                allOpportunities = await response.json();
+                displayOpportunities(allOpportunities);
+                updateCount('opportunitiesCount', allOpportunities.length);
+            } catch (error) {
+                console.error('Error loading opportunities:', error);
+                throw error; // Rethrow to trigger offline mode in loadAllData
+            }
+        }
+
+        // Display Opportunities
+        function displayOpportunities(opportunities) {
+            const container = document.getElementById('opportunitiesContainer');
+            if (opportunities.length === 0) {
+                container.innerHTML = '<div class="no-results">No opportunities found</div>';
+                return;
+            }
+
+            container.innerHTML = opportunities.map(opp => `
+                <div class="opportunity-card" data-category="${opp.category}" onclick='showOpportunityDetails(${JSON.stringify(opp).replace(/'/g, "&#39;")})'>
+                    <div class="opportunity-image">${opp.logo}</div>
+                    <div class="opportunity-info">
+                        <div class="opportunity-title">${opp.title}</div>
+                        <div class="opportunity-company">${opp.company}</div>
+                        <div class="opportunity-details">
+                            <span>📅 ${opp.deadline}</span>
+                            <span>📍 ${opp.location}</span>
+                        </div>
+                        <div class="opportunity-skills">
+                            ${opp.skills.slice(0, 3).map(skill => `<span class="skill-badge">${skill}</span>`).join('')}
+                            ${opp.skills.length > 3 ? `<span class="skill-badge">+${opp.skills.length - 3}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load Skills from API
+        async function loadSkills() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/skills?limit=4`);
+                if (!response.ok) throw new Error('Failed to fetch skills');
+
+                allSkills = await response.json();
+                displaySkills(allSkills);
+                updateCount('skillsCount', allSkills.length);
+            } catch (error) {
+                console.error('Error loading skills:', error);
+                throw error; // Rethrow to trigger offline mode in loadAllData
+            }
+        }
+
+        // Display Skills
+        function displaySkills(skills) {
+            const container = document.getElementById('skillsContainer');
+            if (skills.length === 0) {
+                container.innerHTML = '<div class="no-results">No skills found</div>';
+                return;
+            }
+
+            container.innerHTML = skills.map(skill => `
+                <div class="skill-chip" onclick='showSkillDetails(${JSON.stringify(skill)})'>
+                    <div>${skill.name}</div>
+                    <div class="skill-meta">
+                        <span>${skill.learners.toLocaleString()} learners</span>
+                        <span>${skill.difficulty}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search Functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function (e) {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim();
+
+                if (query.length === 0) {
+                    searchResults.classList.remove('active');
+                    return;
+                }
+
+                searchTimeout = setTimeout(() => performSearch(query), 300);
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.remove('active');
+                }
+            });
+        }
+
+        // Perform Search
+        async function performSearch(query) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/search?query=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Search failed');
+
+                const results = await response.json();
+                displaySearchResults(results);
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+        }
+
+        // Display Search Results
+        function displaySearchResults(results) {
+            const container = document.getElementById('searchResults');
+            let html = '';
+
+            if (results.events && results.events.length > 0) {
+                html += '<div class="search-category">Events</div>';
+                html += results.events.slice(0, 3).map(event => `
+                    <div class="search-result-item" onclick='showEventDetails(${JSON.stringify(event)})'>
+                        <div class="search-result-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4c8bf5" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="search-result-content">
+                            <div class="search-result-title">${event.title}</div>
+                            <div class="search-result-meta">${event.date} • ${event.location}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (results.opportunities && results.opportunities.length > 0) {
+                html += '<div class="search-category">Opportunities</div>';
+                html += results.opportunities.slice(0, 3).map(opp => `
+                    <div class="search-result-item" onclick='showOpportunityDetails(${JSON.stringify(opp).replace(/'/g, "&#39;")})'>
+                        <div class="search-result-icon" style="background: linear-gradient(135deg, #4c8bf5 0%, #3b7ae0 100%); color: white; font-weight: 700;">
+                            ${opp.logo}
+                        </div>
+                        <div class="search-result-content">
+                            <div class="search-result-title">${opp.title}</div>
+                            <div class="search-result-meta">${opp.company} • ${opp.deadline}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (results.skills && results.skills.length > 0) {
+                html += '<div class="search-category">Skills</div>';
+                html += results.skills.slice(0, 3).map(skill => `
+                    <div class="search-result-item" onclick='showSkillDetails(${JSON.stringify(skill)})'>
+                        <div class="search-result-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4c8bf5" stroke-width="2">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                        </div>
+                        <div class="search-result-content">
+                            <div class="search-result-title">${skill.name}</div>
+                            <div class="search-result-meta">${skill.category} • ${skill.difficulty}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (html === '') {
+                html = '<div class="search-result-item">No results found</div>';
+            }
+
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+
+        // Filter Content
+        function filterContent(filter, element) {
+            currentFilter = filter;
+
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+
+            // Special case: "My Events" tab shows only locally tracked registrations
+            if (filter === 'my-events') {
+                console.log('My events:', myEvents);
+                if (myEvents.length === 0) {
+                    document.getElementById('eventsContainer').innerHTML = '<div class="no-results">You have not registered for any events yet.</div>';
+                    showToast('No registered events yet');
+                } else {
+                    displayEvents(myEvents);
+                    showToast('Showing your registered events');
+                }
+                return;
+            }
+
+            const allCards = [...document.querySelectorAll('.event-card, .opportunity-card')];
+            let visibleCount = 0;
+
+            allCards.forEach(card => {
+                if (filter === 'all' || card.dataset.category === filter) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            showToast(`Filtered by: ${filter === 'all' ? 'All' : filter.charAt(0).toUpperCase() + filter.slice(1)}`);
+        }
+
+        // Show Event Details
+        function showEventDetails(event) {
+            const modalBody = `
+                <p class="modal-text">${event.description}</p>
+                <div class="modal-details">
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Date:</span>
+                        <span class="modal-detail-value">${event.date}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Location:</span>
+                        <span class="modal-detail-value">${event.location}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Organizer:</span>
+                        <span class="modal-detail-value">${event.organizer}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Prize:</span>
+                        <span class="modal-detail-value">${event.prize}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Required Skills:</span>
+                        <span class="modal-detail-value">${(event.requiredSkills || event.skills || []).join(', ')}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Registrations:</span>
+                        <span class="modal-detail-value">${event.registrations}/${event.maxParticipants}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Rules:</span>
+                        <span class="modal-detail-value">
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                ${(event.rules || []).map(rule => `<li>${rule}</li>`).join('')}
+                            </ul>
+                        </span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Timeline:</span>
+                        <span class="modal-detail-value">
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                ${(event.timeline || []).map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Countdown:</span>
+                        <span class="modal-detail-value" id="eventCountdown">
+                            ${getEventTimingInfo(event).countdownText}
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="registerForEvent(${event.id})">Register Now</button>
+                    <button class="btn btn-secondary" onclick="findTeamForEvent(${event.id})">Find Team</button>
+                </div>
+                <div id="teamSuggestions" style="margin-top: 20px;"></div>
+            `;
+
+            showModal(event.title, modalBody);
+        }
+
+        // Register for Event
+        async function registerForEvent(eventId) {
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    showToast('Please login to register for events', 'error');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE_URL}/api/events/${eventId}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    const errorMessage = result && result.error ? result.error : 'Registration failed';
+                    throw new Error(errorMessage);
+                }
+
+                // Track in "My Events" tab
+                const updatedEvent = result.event;
+                if (!myEvents.find(e => e.id === updatedEvent.id)) {
+                    myEvents.push(updatedEvent);
+                } else {
+                    myEvents = myEvents.map(e => e.id === updatedEvent.id ? updatedEvent : e);
+                }
+
+                // Persist to localStorage for My Events fallback
+                try {
+                    const saved = localStorage.getItem('registeredEvents') || '[]';
+                    const arr = JSON.parse(saved);
+                    if (!arr.includes(updatedEvent.id)) {
+                        arr.push(updatedEvent.id);
+                        localStorage.setItem('registeredEvents', JSON.stringify(arr));
+                    }
+                } catch (e) {
+                    console.error('Error saving to localStorage:', e);
+                }
+
+                showToast('Successfully registered for event!', 'success');
+                closeModal();
+                loadEvents(); // Reload to show updated count
+            } catch (error) {
+                showToast(error.message || 'Registration failed. Please try again.', 'error');
+            }
+        }
+
+        // Show Opportunity Details
+        function showOpportunityDetails(opp) {
+            const modalBody = `
+                <p class="modal-text">${opp.description}</p>
+                <div class="modal-details">
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Company:</span>
+                        <span class="modal-detail-value">${opp.company}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Location:</span>
+                        <span class="modal-detail-value">${opp.location}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Duration:</span>
+                        <span class="modal-detail-value">${opp.duration}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Stipend:</span>
+                        <span class="modal-detail-value">${opp.stipend}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Deadline:</span>
+                        <span class="modal-detail-value">${opp.deadline}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Applicants:</span>
+                        <span class="modal-detail-value">${opp.applicants} applications for ${opp.openings} openings</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Skills Required:</span>
+                        <span class="modal-detail-value">${opp.skills.join(', ')}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Requirements:</span>
+                        <span class="modal-detail-value">
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                ${opp.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="applyToOpportunity(${opp.id})">Apply Now</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">Save for Later</button>
+                </div>
+            `;
+
+            showModal(opp.title, modalBody);
+        }
+
+        // NEW: Find team for event using compatibility API
+        async function findTeamForEvent(eventId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/events/${eventId}/match`);
+                if (!response.ok) throw new Error('Failed to find matches');
+
+                const result = await response.json();
+                const container = document.getElementById('teamSuggestions');
+                if (!container) {
+                    return;
+                }
+
+                if (!result.matches || result.matches.length === 0) {
+                    container.innerHTML = '<p class="modal-text">No suitable team matches found yet. Try improving your skills or inviting your peers!</p>';
+                    return;
+                }
+
+                const html = `
+                    <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 16px; font-weight: 600; color: #1a1f2e;">Potential Teammates</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        ${result.matches.map(match => `
+                            <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                                <div>
+                                    <div style="font-weight: 600; font-size: 14px;">${match.name}</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Skills: ${match.skills.join(', ')}</div>
+                                    <div style="font-size: 12px; color: #10b981; margin-top: 4px;">Compatibility: ${match.compatibility}%</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" onclick="showToast('Invite sent to ${match.name}', 'success')">Invite</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error finding team:', error);
+                showToast('Error fetching team matches', 'error');
+            }
+        }
+
+        // Apply to Opportunity
+        async function applyToOpportunity(oppId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/opportunities/${oppId}/apply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) throw new Error('Application failed');
+
+                const result = await response.json();
+                showToast('Application submitted successfully!', 'success');
+                closeModal();
+                loadOpportunities(); // Reload to show updated count
+            } catch (error) {
+                showToast('Application failed. Please try again.', 'error');
+            }
+        }
+
+        // Show Skill Details
+        function showSkillDetails(skill) {
+            const modalBody = `
+                <p class="modal-text">${skill.description}</p>
+                <div class="modal-details">
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Category:</span>
+                        <span class="modal-detail-value">${skill.category}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Difficulty:</span>
+                        <span class="modal-detail-value">${skill.difficulty}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Learners:</span>
+                        <span class="modal-detail-value">${skill.learners.toLocaleString()} people learning</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Courses:</span>
+                        <span class="modal-detail-value">${skill.courses} available courses</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Avg Time:</span>
+                        <span class="modal-detail-value">${skill.avgTime}</span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Related Skills:</span>
+                        <span class="modal-detail-value">${skill.relatedSkills.join(', ')}</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="startLearning('${skill.name}')">Start Learning</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">Explore More</button>
+                </div>
+            `;
+
+            showModal(skill.name, modalBody);
+        }
+
+        // Start Learning
+        function startLearning(skillName) {
+            showToast(`Starting ${skillName} learning path!`, 'success');
+            closeModal();
+        }
+
+        // Show Feature Modal
+        function showFeatureModal(title, description) {
+            const modalBody = `<p class="modal-text">${description}</p>`;
+            showModal(title, modalBody);
+        }
+
+        // Show Login Modal
+        function showLoginModal() {
+            const modalBody = `
+                <p class="modal-text">Welcome back! Please log in to access your personalized dashboard and saved opportunities.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="showToast('Login feature coming soon!'); closeModal();">Login</button>
+                    <button class="btn btn-secondary" onclick="showCreateProfileModal()">Create Account</button>
+                </div>
+            `;
+            showModal('Login', modalBody);
+        }
+
+        // Show Create Profile Modal
+        function showCreateProfileModal() {
+            const modalBody = `
+                <p class="modal-text">Start your journey with OpporLink! Create a profile to access exclusive opportunities, connect with peers, and track your progress.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="showToast('Profile creation coming soon!', 'success'); closeModal();">Get Started</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">Maybe Later</button>
+                </div>
+            `;
+            showModal('Create Your Profile', modalBody);
+        }
+
+        // Modal Functions
+        function showModal(title, bodyHtml) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = bodyHtml;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.getElementById('modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Toast Notification
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast active ' + type;
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Load More Functions
+        async function loadMoreEvents() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/events`);
+                if (!response.ok) throw new Error('Failed to fetch all events');
+
+                allEvents = await response.json();
+                displayEvents(allEvents);
+                showToast('All events loaded!');
+            } catch (error) {
+                showToast('Error loading events', 'error');
+            }
+        }
+
+        async function loadMoreOpportunities() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/opportunities`);
+                if (!response.ok) throw new Error('Failed to fetch all opportunities');
+
+                allOpportunities = await response.json();
+                displayOpportunities(allOpportunities);
+                showToast('All opportunities loaded!');
+            } catch (error) {
+                showToast('Error loading opportunities', 'error');
+            }
+        }
+
+        // Update Count
+        function updateCount(elementId, count) {
+            document.getElementById(elementId).textContent = count;
+        }
+
+        // Navigation Functions
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showUserMenu() {
+            showToast('User menu feature coming soon!');
+        }
+
+        function navigateTo(section) {
+            showToast(`Navigating to ${section}...`);
+        }
+
+        // NEW: main navbar navigation (Home / Events / Opportunities / Skill Exchange / Community)
+        function navigateMain(sectionId, el) {
+            // update active tab
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            if (el) {
+                el.classList.add('active');
+            }
+
+            // scroll to matching section
+            scrollToSection(sectionId);
+        }
+
+        function filterAndNavigate(filter) {
+            scrollToTop();
+            setTimeout(() => {
+                const tab = document.querySelector(`[data-filter="${filter}"]`);
+                if (tab) {
+                    filterContent(filter, tab);
+                }
+            }, 500);
+        }
+
+        // Fallback local data if API is unavailable
+        function loadLocalData() {
+            // Use the same data structure as the API
+            allEvents = [
+                {
+                    id: 1,
+                    title: 'Future Hack 2026',
+                    description: 'Join us for an exciting AI/ML hackathon!',
+                    date: 'Jan 30 - Feb 2',
+                    type: 'Hackathon',
+                    location: 'Online',
+                    registrations: 245,
+                    maxParticipants: 500,
+                    tags: ['creative', 'coding', 'ai'],
+                    category: 'hackathons',
+                    organizer: 'Tech Institute',
+                    prize: '$10,000',
+                    skills: ['Python', 'Machine Learning'],
+                    // NEW fields for upgraded events system
+                    rules: [
+                        'Teams of up to 4 members',
+                        'All code must be written during the event'
+                    ],
+                    timeline: [
+                        'Jan 15, 2026 – Registrations open',
+                        'Jan 30 - Feb 2, 2026 – Main hackathon'
+                    ],
+                    mode: 'online',
+                    domain: 'ai-ml',
+                    difficulty: 'intermediate',
+                    eventDate: '2026-01-30T09:00:00Z',
+                    registrationDeadline: '2026-01-28T23:59:59Z',
+                    requiredSkills: ['Python', 'Machine Learning']
+                }
+            ];
+            allOpportunities = [
+                { id: 1, title: 'Software Engineer Intern', company: 'Google', deadline: 'Feb 28, 2026', location: 'Mountain View, CA', skills: ['Python', 'DSA'], requirements: ['CS degree'], logo: 'G', category: 'internships', duration: '12 weeks', stipend: '$8,000/month', applicants: 1250, openings: 50, description: 'Work on cutting-edge projects.' }
+            ];
+            allSkills = [
+                { id: 1, name: 'React', category: 'Frontend', difficulty: 'Intermediate', learners: 15420, courses: 45, avgTime: '8 weeks', description: 'Modern JavaScript library', relatedSkills: ['JavaScript', 'HTML'] }
+            ];
+
+            displayEvents(allEvents);
+            displayOpportunities(allOpportunities);
+            displaySkills(allSkills);
+            updateCount('eventsCount', allEvents.length);
+            updateCount('opportunitiesCount', allOpportunities.length);
+            updateCount('skillsCount', allSkills.length);
+        }
+
+        // Firebase Auth Handler
+        function handleLogout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userAge");
+            localStorage.removeItem("userSkills");
+            location.reload();
+        }
+
+        // Profile Modal Functions
+        function toggleProfileModal() {
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                modal.classList.toggle('active');
+            }
+        }
+
+        function closeProfileModal() {
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (event) {
+            const modal = document.getElementById('profileModal');
+            const userIcon = document.getElementById('userIconBtn');
+
+            if (modal && userIcon && !modal.contains(event.target) && !userIcon.contains(event.target)) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Update profile modal with user data
+        function updateProfileDisplay() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const userAge = localStorage.getItem('userAge');
+            const userSkills = localStorage.getItem('userSkills');
+
+            if (userName) {
+                document.getElementById('profileName').textContent = userName;
+                document.getElementById('profileAvatarEdit').textContent = userName.charAt(0).toUpperCase();
+                const firstLetter = userName.charAt(0).toUpperCase();
+                document.getElementById('profileAvatar').textContent = firstLetter;
+            }
+
+            if (userEmail) {
+                document.getElementById('profileEmail').textContent = userEmail;
+                document.getElementById('profileEmailField').textContent = userEmail;
+            }
+
+            if (userAge) {
+                document.getElementById('profileAge').textContent = userAge;
+            }
+
+            if (userSkills) {
+                const skillsArray = userSkills.split(',').map(s => s.trim());
+                const skillsHtml = skillsArray.map(skill => `<span class="skill-tag">${skill}</span>`).join('');
+                document.getElementById('profileSkills').innerHTML = skillsHtml;
+            }
+        }
+
+        // Enter edit mode
+        function enterEditMode() {
+            const userName = localStorage.getItem('userName') || '';
+            const userAge = localStorage.getItem('userAge') || '';
+            const userSkills = localStorage.getItem('userSkills') || '';
+
+            document.getElementById('editName').value = userName;
+            document.getElementById('editAge').value = userAge;
+            document.getElementById('editSkills').value = userSkills;
+
+            document.getElementById('profileViewMode').style.display = 'none';
+            document.getElementById('profileEditMode').style.display = 'block';
+        }
+
+        // Cancel edit mode
+        function cancelEditMode() {
+            document.getElementById('profileViewMode').style.display = 'block';
+            document.getElementById('profileEditMode').style.display = 'none';
+        }
+
+        // Save profile changes
+        function saveProfileChanges(event) {
+            event.preventDefault();
+
+            const newName = document.getElementById('editName').value;
+            const newAge = document.getElementById('editAge').value;
+            const newSkills = document.getElementById('editSkills').value;
+
+            if (!newName || !newAge || !newSkills) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('userName', newName);
+            localStorage.setItem('userAge', newAge);
+            localStorage.setItem('userSkills', newSkills);
+
+            // Update display
+            updateProfileDisplay();
+
+            // Exit edit mode
+            cancelEditMode();
+        }
+
+        // Firebase Auth Setup
+        function initializeFirebaseAuth() {
+            const loginBtn = document.getElementById("login-btn");
+            const userInfo = document.getElementById("user-info");
+            const userEmail = document.getElementById("user-email");
+
+            // Check if user is already logged in
+            const token = localStorage.getItem("token");
+            const email = localStorage.getItem("userEmail");
+
+            if (token && email) {
+                loginBtn.style.display = "none";
+                userEmail.textContent = email;
+                userInfo.style.display = "flex";
+                updateProfileDisplay();
+            } else {
+                loginBtn.style.display = "block";
+                userInfo.style.display = "none";
+            }
+        }
+
+        // Run auth check on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeFirebaseAuth();
+        });
+    </script>
+</body>
+
+</html>

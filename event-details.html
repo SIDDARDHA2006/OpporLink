@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascendify - Event Details</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #1a1f2e;
+            color: white;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .logo svg { width: 24px; height: 24px; }
+        .page {
+            max-width: 900px;
+            margin: 32px auto;
+            padding: 0 16px 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        .event-organizer {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+        .tag {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .tag-mode { background:#d1fae5; color:#065f46; }
+        .tag-difficulty { background:#dbeafe; color:#1e40af; }
+        .tag-category { background:#e5e7eb; color:#374151; }
+        .description {
+            font-size: 14px;
+            color: #4b5563;
+            margin: 12px 0 16px;
+        }
+        h3 {
+            font-size: 16px;
+            margin: 18px 0 8px;
+            color: #111827;
+        }
+        ul {
+            margin-left: 20px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background:#e0f2fe;
+            color:#075985;
+            font-size: 12px;
+        }
+        .countdown {
+            margin-top: 8px;
+            font-size: 14px;
+            color:#1f2937;
+        }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-primary { background:#4c8bf5; color:white; }
+        .btn-secondary { background:white; color:#4c8bf5; border:1px solid #d5dde6; }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background:#1a1f2e;
+            color:white;
+            font-size: 13px;
+            display:none;
+        }
+        .toast.active { display:block; }
+        .toast.success { background:#10b981; }
+        .toast.error { background:#ef4444; }
+        .modal {
+            display:none;
+            position:fixed;
+            top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5);
+            align-items:center;
+            justify-content:center;
+            z-index:2000;
+        }
+        .modal.active { display:flex; }
+        .modal-content {
+            background:white;
+            border-radius:12px;
+            padding:20px;
+            max-width:600px;
+            width:90%;
+            max-height:80vh;
+            overflow-y:auto;
+            position:relative;
+        }
+        .modal-close {
+            position:absolute;
+            top:8px;
+            right:10px;
+            font-size:20px;
+            cursor:pointer;
+            color:#6b7280;
+        }
+    </style>
+</head>
+<body>
+    <!-- API Configuration -->
+    <script src="api-config.js"></script>
+
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            Ascendify
+        </div>
+    </nav>
+
+    <div class="page">
+        <div class="card" id="content">
+            Loading event...
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeTeamModal()">&times;</span>
+            <h3 style="margin-bottom:10px;">Suggested Teammates</h3>
+            <div id="teamBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3001';
+        let eventData = null;
+        let countdownInterval = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) {
+                document.getElementById('content').textContent = 'No event selected.';
+                return;
+            }
+            loadEvent(id);
+        });
+
+        async function loadEvent(id) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/events/${id}`);
+                if (!res.ok) throw new Error('Failed to load event');
+                eventData = await res.json();
+                renderEvent();
+                startCountdown();
+            } catch (err) {
+                document.getElementById('content').textContent = 'Unable to load event.';
+            }
+        }
+
+        function renderEvent() {
+            const e = eventData;
+            const container = document.getElementById('content');
+            const requiredSkills = e.requiredSkills || e.skills || [];
+
+            container.innerHTML = `
+                <div class="event-title">${e.title}</div>
+                <div class="event-organizer">Organized by ${e.organizer || 'TBA'}</div>
+                <div class="meta-row">
+                    <span>${e.eventDate ? new Date(e.eventDate).toLocaleString() : e.date || ''}</span>
+                    <span>📍 ${e.location || 'Online'}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="tag tag-category">${e.category}</span>
+                    <span class="tag tag-mode">${e.mode ? e.mode.charAt(0).toUpperCase() + e.mode.slice(1) : 'Mode'}</span>
+                    <span class="tag tag-difficulty">${e.difficulty ? e.difficulty.charAt(0).toUpperCase() + e.difficulty.slice(1) : 'N/A'}</span>
+                    ${e.prize ? `<span class="tag tag-category">Prize: ${e.prize}</span>` : ''}
+                </div>
+                <p class="description">${e.description}</p>
+
+                <h3>Required Skills</h3>
+                <div class="pill-row">
+                    ${requiredSkills.map(s => `<span class="pill">${s}</span>`).join('')}
+                </div>
+
+                <h3>Rules</h3>
+                <ul>
+                    ${(e.rules || []).map(r => `<li>${r}</li>`).join('')}
+                </ul>
+
+                <h3>Timeline</h3>
+                <ul>
+                    ${(e.timeline || []).map(t => `<li>${t}</li>`).join('')}
+                </ul>
+
+                <h3>Registration</h3>
+                <div class="meta-row">
+                    <span>Deadline: ${e.registrationDeadline ? new Date(e.registrationDeadline).toLocaleString() : 'N/A'}</span>
+                    <span>Spots: ${e.registrations}/${e.maxParticipants}</span>
+                </div>
+                <div class="countdown" id="countdownText">Calculating time left...</div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="registerForEvent(${e.id})">Register</button>
+                    <button class="btn btn-secondary" onclick="findTeam(${e.id})">Find Team</button>
+                </div>
+            `;
+        }
+
+        function startCountdown() {
+            if (!eventData || !eventData.registrationDeadline) return;
+            const deadline = new Date(eventData.registrationDeadline);
+            const el = document.getElementById('countdownText');
+
+            function update() {
+                const now = new Date();
+                const diff = deadline - now;
+                if (diff <= 0) {
+                    el.textContent = 'Registration closed';
+                    clearInterval(countdownInterval);
+                    return;
+                }
+                const days = Math.floor(diff / (1000*60*60*24));
+                const hours = Math.floor((diff / (1000*60*60)) % 24);
+                const mins = Math.floor((diff / (1000*60)) % 60);
+                el.textContent = `${days}d ${hours}h ${mins}m left to register`;
+            }
+
+            update();
+            countdownInterval = setInterval(update, 1000);
+        }
+
+        async function registerForEvent(id) {
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    showToast('Please login to register', 'error');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const res = await fetch(`${API_BASE_URL}/api/events/${id}/register`, { 
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const body = await res.json();
+                if (!res.ok || !body.success) {
+                    throw new Error(body.error || 'Registration failed');
+                }
+                eventData = body.event;
+                renderEvent();
+                startCountdown();
+                showToast('Successfully registered!', 'success');
+            } catch (err) {
+                showToast(err.message || 'Registration failed', 'error');
+            }
+        }
+
+        async function findTeam(id) {
+            const body = document.getElementById('teamBody');
+            body.innerHTML = 'Loading...';
+            document.getElementById('teamModal').classList.add('active');
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/events/${id}/match`);
+                if (!res.ok) throw new Error('Failed to load matches');
+                const data = await res.json();
+                if (!data.matches || data.matches.length === 0) {
+                    body.textContent = 'No suitable matches found yet.';
+                    return;
+                }
+                body.innerHTML = data.matches.map(m => `
+                    <div style="border:1px solid #e5e7eb; border-radius:8px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                        <div>
+                            <div style="font-weight:600; font-size:14px;">${m.name}</div>
+                            <div style="font-size:12px; color:#6b7280;">Skills: ${m.skills.join(', ')}</div>
+                            <div style="font-size:12px; color:#10b981; margin-top:4px;">Compatibility: ${m.compatibility}% • Rating: ${m.rating}</div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="showToast('Invite sent to ${m.name}', 'success')">Invite</button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                body.textContent = 'Error loading matches.';
+            }
+        }
+
+        function closeTeamModal() {
+            document.getElementById('teamModal').classList.remove('active');
+        }
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast active ' + type;
+            setTimeout(() => toast.classList.remove('active'), 3000);
+        }
+    </script>
+</body>
+</html>
+

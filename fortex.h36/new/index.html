@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community Hub</title>
+    <meta
+      name="description"
+      content="Build. Share. Collaborate. Discussion forums, project showcase, and team recruitment for students."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">CH</div>
+          <div class="brand-text">
+            <div class="brand-name">Community Hub</div>
+            <div class="brand-tagline">Build. Share. Collaborate.</div>
+          </div>
+        </div>
+
+        <nav class="top-nav" aria-label="Primary">
+          <button class="nav-link is-active" data-route="home" type="button">Home</button>
+          <button class="nav-link" data-route="forums" type="button">Forums</button>
+          <button class="nav-link" data-route="showcase" type="button">Showcase</button>
+          <button class="nav-link" data-route="recruitment" type="button">Teammates</button>
+          <button class="nav-link" data-route="guidelines" type="button">Guidelines</button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="site-main">
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <h1>Welcome to the Community Hub</h1>
+            <p class="lead">
+              A space where students interact, share knowledge, showcase projects, and find teammates for
+              collaboration.
+            </p>
+
+            <div class="cta-row" role="group" aria-label="Primary actions">
+              <button class="btn btn-primary" type="button" data-open="create-post">Create a Post</button>
+              <button class="btn btn-secondary" type="button" data-open="showcase-project">Showcase a Project</button>
+              <button class="btn btn-ghost" type="button" data-open="find-teammates">Find Teammates</button>
+            </div>
+
+            <div class="hero-stats" aria-label="Highlights">
+              <div class="stat">
+                <div class="stat-num" data-stat="posts">0</div>
+                <div class="stat-label">Discussion posts</div>
+              </div>
+              <div class="stat">
+                <div class="stat-num" data-stat="projects">0</div>
+                <div class="stat-label">Projects shared</div>
+              </div>
+              <div class="stat">
+                <div class="stat-num" data-stat="roles">0</div>
+                <div class="stat-label">Open roles</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-card" role="region" aria-label="Quick search">
+            <h2>Search & filter</h2>
+            <p class="muted">Explore topics, projects, and teammate openings.</p>
+
+            <div class="search-grid">
+              <label class="field">
+                <span class="label">Search</span>
+                <input id="q" type="search" placeholder="Try: AI, React, Hackathon..." autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span class="label">Area</span>
+                <select id="area">
+                  <option value="all">All</option>
+                  <option value="forums">Discussion forums</option>
+                  <option value="showcase">Project showcase</option>
+                  <option value="recruitment">Team recruitment</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span class="label">Category (Forums)</span>
+                <select id="category">
+                  <option value="all">All categories</option>
+                  <option value="Artificial Intelligence">Artificial Intelligence</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                  <option value="Hackathons & Competitions">Hackathons & Competitions</option>
+                  <option value="General Discussion">General Discussion</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="filter-actions">
+              <button class="btn btn-secondary" type="button" id="clearFilters">Clear</button>
+              <button class="btn btn-primary" type="button" id="viewResults">View results</button>
+            </div>
+
+            <div class="hint">
+              Tip: Everything you create is saved locally in your browser (no backend required).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container section" id="router">
+        <!-- Home -->
+        <div class="route is-active" data-route="home">
+          <div class="grid-3">
+            <article class="panel">
+              <div class="panel-top">
+                <h2>💬 Discussion Forums</h2>
+                <p class="muted">
+                  Ask questions, share ideas, and participate in meaningful discussions across technical
+                  and non-technical topics.
+                </p>
+              </div>
+              <div class="chips" aria-label="Forum categories">
+                <span class="chip">Artificial Intelligence</span>
+                <span class="chip">Web Development</span>
+                <span class="chip">Data Structures & Algorithms</span>
+                <span class="chip">Hackathons & Competitions</span>
+                <span class="chip">General Discussion</span>
+              </div>
+              <div class="panel-actions">
+                <button class="btn btn-primary" type="button" data-route-link="forums">Explore forums</button>
+                <button class="btn btn-ghost" type="button" data-open="create-post">Create post</button>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-top">
+                <h2>🚀 Project Showcase</h2>
+                <p class="muted">
+                  Display your projects and explore innovative work created by other students.
+                </p>
+              </div>
+              <ul class="bullets">
+                <li><strong>Build your portfolio</strong></li>
+                <li><strong>Gain visibility</strong></li>
+                <li><strong>Learn from others’ projects</strong></li>
+              </ul>
+              <div class="panel-actions">
+                <button class="btn btn-primary" type="button" data-route-link="showcase">Browse projects</button>
+                <button class="btn btn-ghost" type="button" data-open="showcase-project">Add project</button>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-top">
+                <h2>👥 Team Recruitment</h2>
+                <p class="muted">
+                  Find the right people to build and innovate with. Post roles, required skills, and
+                  timelines.
+                </p>
+              </div>
+              <ul class="bullets">
+                <li><strong>Post team requirements</strong></li>
+                <li><strong>Browse open positions</strong></li>
+                <li><strong>Connect quickly</strong></li>
+              </ul>
+              <div class="panel-actions">
+                <button class="btn btn-primary" type="button" data-route-link="recruitment">Find teammates</button>
+                <button class="btn btn-ghost" type="button" data-open="find-teammates">Post a role</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="two-col">
+            <div class="panel panel-flat">
+              <h3>What you can do</h3>
+              <div class="mini-grid">
+                <div class="mini">
+                  <div class="mini-title">Forums</div>
+                  <div class="mini-text">Create posts, reply, upvote helpful answers, search and filter.</div>
+                </div>
+                <div class="mini">
+                  <div class="mini-title">Showcase</div>
+                  <div class="mini-text">Add title, description, tech stack, GitHub link, and live demo.</div>
+                </div>
+                <div class="mini">
+                  <div class="mini-title">Recruitment</div>
+                  <div class="mini-text">Post roles needed, required skills, project name, duration.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel panel-flat">
+              <h3>Community guidelines</h3>
+              <ul class="bullets">
+                <li><strong>Be respectful and supportive</strong></li>
+                <li><strong>No spam or offensive content</strong></li>
+                <li><strong>Share accurate and helpful information</strong></li>
+              </ul>
+              <div class="panel-actions">
+                <button class="btn btn-secondary" type="button" data-route-link="guidelines">Read guidelines</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Forums -->
+        <div class="route" data-route="forums">
+          <div class="route-header">
+            <div>
+              <h2>💬 Discussion Forums</h2>
+              <p class="muted">Ask questions, share ideas, and help each other grow.</p>
+            </div>
+            <div class="route-actions">
+              <button class="btn btn-primary" type="button" data-open="create-post">Create post</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <label class="field field-inline">
+                <span class="label">Category</span>
+                <select id="forumsCategory">
+                  <option value="all">All categories</option>
+                  <option value="Artificial Intelligence">Artificial Intelligence</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                  <option value="Hackathons & Competitions">Hackathons & Competitions</option>
+                  <option value="General Discussion">General Discussion</option>
+                </select>
+              </label>
+              <label class="field field-inline">
+                <span class="label">Search</span>
+                <input id="forumsSearch" type="search" placeholder="Search posts..." />
+              </label>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-secondary" type="button" id="seedDemo">Load demo data</button>
+              <button class="btn btn-ghost" type="button" id="resetAll">Reset local data</button>
+            </div>
+          </div>
+
+          <div id="forumsList" class="list"></div>
+          <div id="forumsEmpty" class="empty">
+            <div class="empty-title">No posts yet</div>
+            <div class="empty-text">Create the first discussion post to get the conversation started.</div>
+          </div>
+        </div>
+
+        <!-- Showcase -->
+        <div class="route" data-route="showcase">
+          <div class="route-header">
+            <div>
+              <h2>🚀 Project Showcase</h2>
+              <p class="muted">Share what you built and explore projects from others.</p>
+            </div>
+            <div class="route-actions">
+              <button class="btn btn-primary" type="button" data-open="showcase-project">Add project</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <label class="field field-inline">
+                <span class="label">Search</span>
+                <input id="projectsSearch" type="search" placeholder="Search projects..." />
+              </label>
+            </div>
+          </div>
+
+          <div id="projectsList" class="grid-cards"></div>
+          <div id="projectsEmpty" class="empty">
+            <div class="empty-title">No projects yet</div>
+            <div class="empty-text">Showcase your project and inspire others.</div>
+          </div>
+        </div>
+
+        <!-- Recruitment -->
+        <div class="route" data-route="recruitment">
+          <div class="route-header">
+            <div>
+              <h2>👥 Team Recruitment</h2>
+              <p class="muted">Post roles and find teammates for your next build.</p>
+            </div>
+            <div class="route-actions">
+              <button class="btn btn-primary" type="button" data-open="find-teammates">Post a role</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <label class="field field-inline">
+                <span class="label">Search</span>
+                <input id="rolesSearch" type="search" placeholder="Search roles..." />
+              </label>
+            </div>
+          </div>
+
+          <div id="rolesList" class="grid-cards"></div>
+          <div id="rolesEmpty" class="empty">
+            <div class="empty-title">No openings posted</div>
+            <div class="empty-text">Post a role and start building your team.</div>
+          </div>
+        </div>
+
+        <!-- Guidelines -->
+        <div class="route" data-route="guidelines">
+          <div class="route-header">
+            <div>
+              <h2>🔐 Community Guidelines</h2>
+              <p class="muted">Help keep this space safe, useful, and welcoming.</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Rules</h3>
+            <ul class="bullets">
+              <li><strong>Be respectful and supportive</strong> — disagree kindly and focus on ideas.</li>
+              <li><strong>No spam or offensive content</strong> — keep it professional.</li>
+              <li><strong>Share accurate and helpful information</strong> — cite sources when possible.</li>
+              <li><strong>Protect privacy</strong> — don’t post personal data.</li>
+            </ul>
+            <div class="callout">
+              This is a front-end demo. For real moderation, you’d add authentication, reporting, and admin tools.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="muted">© <span id="year"></span> Community Hub</div>
+        <div class="footer-links">
+          <button class="link" type="button" data-route-link="forums">Forums</button>
+          <button class="link" type="button" data-route-link="showcase">Showcase</button>
+          <button class="link" type="button" data-route-link="recruitment">Teammates</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal: Create Post -->
+    <div class="modal-backdrop" data-modal="create-post" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="createPostTitle">
+        <div class="modal-header">
+          <h3 id="createPostTitle">Create a discussion post</h3>
+          <button class="icon-btn" type="button" data-close aria-label="Close dialog">✕</button>
+        </div>
+        <form id="createPostForm" class="modal-body">
+          <label class="field">
+            <span class="label">Title</span>
+            <input name="title" required maxlength="120" placeholder="e.g., How to start with ML projects?" />
+          </label>
+          <label class="field">
+            <span class="label">Category</span>
+            <select name="category" required>
+              <option value="Artificial Intelligence">Artificial Intelligence</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+              <option value="Hackathons & Competitions">Hackathons & Competitions</option>
+              <option value="General Discussion">General Discussion</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="label">Body</span>
+            <textarea
+              name="body"
+              required
+              minlength="10"
+              placeholder="Write your question or idea…"
+              rows="6"
+            ></textarea>
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" type="button" data-close>Cancel</button>
+            <button class="btn btn-primary" type="submit">Publish</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Add Project -->
+    <div class="modal-backdrop" data-modal="showcase-project" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addProjectTitle">
+        <div class="modal-header">
+          <h3 id="addProjectTitle">Showcase a project</h3>
+          <button class="icon-btn" type="button" data-close aria-label="Close dialog">✕</button>
+        </div>
+        <form id="addProjectForm" class="modal-body">
+          <label class="field">
+            <span class="label">Project title</span>
+            <input name="title" required maxlength="120" placeholder="e.g., Smart Attendance System" />
+          </label>
+          <label class="field">
+            <span class="label">Short description</span>
+            <textarea name="description" required minlength="10" rows="4" placeholder="What does it do?"></textarea>
+          </label>
+          <label class="field">
+            <span class="label">Technologies used</span>
+            <input name="tech" placeholder="e.g., React, Node.js, MongoDB" />
+          </label>
+          <div class="two-fields">
+            <label class="field">
+              <span class="label">GitHub link</span>
+              <input name="github" placeholder="https://github.com/username/repo" />
+            </label>
+            <label class="field">
+              <span class="label">Live demo link</span>
+              <input name="demo" placeholder="https://your-demo.com" />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" type="button" data-close>Cancel</button>
+            <button class="btn btn-primary" type="submit">Add project</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Post Role -->
+    <div class="modal-backdrop" data-modal="find-teammates" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="postRoleTitle">
+        <div class="modal-header">
+          <h3 id="postRoleTitle">Post a teammate requirement</h3>
+          <button class="icon-btn" type="button" data-close aria-label="Close dialog">✕</button>
+        </div>
+        <form id="postRoleForm" class="modal-body">
+          <div class="two-fields">
+            <label class="field">
+              <span class="label">Role needed</span>
+              <input name="role" required placeholder="e.g., Frontend Developer" />
+            </label>
+            <label class="field">
+              <span class="label">Duration</span>
+              <input name="duration" placeholder="e.g., 4 weeks" />
+            </label>
+          </div>
+          <label class="field">
+            <span class="label">Project / event name</span>
+            <input name="project" required placeholder="e.g., Hackathon 2026 — FinTech" />
+          </label>
+          <label class="field">
+            <span class="label">Required skills</span>
+            <input name="skills" placeholder="e.g., Figma, React, API integration" />
+          </label>
+          <label class="field">
+            <span class="label">How to contact</span>
+            <input name="contact" required placeholder="e.g., email or Discord handle" />
+          </label>
+          <label class="field">
+            <span class="label">Notes</span>
+            <textarea name="notes" rows="4" placeholder="Tell candidates what you’re building…"></textarea>
+          </label>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" type="button" data-close>Cancel</button>
+            <button class="btn btn-primary" type="submit">Post role</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
