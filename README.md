@@ -1,4 +1,4 @@
-# Ascendify Platform - Full Stack Application
+# OpporLink Platform - Full Stack Application
 
 A complete platform for discovering opportunities, building skills, and growing together with peers.
 
